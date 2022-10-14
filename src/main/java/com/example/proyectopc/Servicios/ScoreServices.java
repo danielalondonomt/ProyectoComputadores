@@ -1,6 +1,5 @@
 package com.example.proyectopc.Servicios;
 
-import com.example.proyectopc.modelo.Message;
 import com.example.proyectopc.modelo.Score;
 import com.example.proyectopc.repositorio.ScoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,8 @@ public class ScoreServices {
                 if(p.getScore()!=null){
                     q.get().setScore(p.getScore());
                 }
-                if(p.getReservation()!=null){
-                    q.get().setReservation(p.getReservation());
+                if(p.getReservations()!=null){
+                    q.get().setReservations(p.getReservations());
                 }
                 scoreRepository.save(q.get());
                 return q.get();

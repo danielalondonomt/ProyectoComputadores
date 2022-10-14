@@ -22,7 +22,7 @@ public class ReservationServices {
     }
     public Reservation save(Reservation p){
         if(p.getIdReservation()==null){
-            return reservationRepository.save(p);
+            return reservationRepository.save(p) ;
         } else {
             Optional<Reservation> e = reservationRepository.getReservation(p.getIdReservation());
             if(e.isPresent()){
@@ -37,8 +37,8 @@ public class ReservationServices {
         if (p.getIdReservation() != null) {
             Optional<Reservation> q = reservationRepository.getReservation(p.getIdReservation());
             if (q.isPresent()) {
-                if (p.getStarDate() != null) {
-                    q.get().setStarDate(p.getStarDate());
+                if (p.getStartDate() != null) {
+                    q.get().setStartDate(p.getStartDate());
                 }
                 if (p.getDevolutionDate() != null) {
                     q.get().setDevolutionDate(p.getDevolutionDate());
@@ -46,11 +46,12 @@ public class ReservationServices {
                 if(p.getClient()!=null){
                     q.get().setClient(p.getClient());
                 }
-                if(p.getComputer()!=null){
-                    q.get().setComputer(p.getComputer());
+                if(p.getComputers()!=null){
+                    q.get().setComputers(p.getComputers());
                 }
-                if(p.getScore()!=null){
-                    q.get().setScore(p.getScore());
+
+                if(p.getStatus()!=null){
+                    q.get().setStatus(p.getStatus());
                 }
                     reservationRepository.save(q.get());
                     return q.get();

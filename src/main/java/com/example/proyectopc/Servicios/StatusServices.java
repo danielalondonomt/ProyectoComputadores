@@ -1,6 +1,5 @@
 package com.example.proyectopc.Servicios;
 
-import com.example.proyectopc.modelo.Score;
 import com.example.proyectopc.modelo.Status;
 import com.example.proyectopc.repositorio.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,8 @@ public class StatusServices {
                 if(p.getStatus()!=null){
                     q.get().setStatus(p.getStatus());
                 }
-                if(p.getReservation()!=null){
-                    q.get().setReservation(p.getReservation());
+                if(p.getReservations()!=null){
+                    q.get().setReservations(p.getReservations());
                 }
                 statusRepository.save(q.get());
                 return q.get();

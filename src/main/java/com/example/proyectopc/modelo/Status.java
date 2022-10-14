@@ -15,8 +15,8 @@ public class Status {
 
     @ManyToOne
     @JoinColumn(name="idReservation")
-    @JsonIgnoreProperties({"reservation","status"})
-    private Reservation reservation;
+    @JsonIgnoreProperties({"reservations","status"})
+    private Reservation reservations;
 
     public Integer getIdStatus() {
         return idStatus;
@@ -34,11 +34,11 @@ public class Status {
         this.status = status;
     }
 
-    public Reservation getReservation() {
-        return reservation;
+    public Reservation getReservations() {
+        return reservations;
     }
 
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
+    public void setReservations(Reservation reservation) {
+        this.reservations = reservation;
     }
 }

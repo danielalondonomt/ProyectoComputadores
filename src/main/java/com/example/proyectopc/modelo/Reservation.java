@@ -14,22 +14,25 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idReservation;
-    private Date starDate;
+    private Date startDate;
     private Date devolutionDate;
+    private String status="created";
 
     @ManyToOne
     @JoinColumn(name="idComputer")
-    @JsonIgnoreProperties({"computer","reservation","client"})
-    private Computer computer;
+    @JsonIgnoreProperties({"computers","reservations","client"})
+    private Computer computers;
 
     @ManyToOne
     @JoinColumn(name="idClient")
-    @JsonIgnoreProperties({"reservation","client","message"})
+    @JsonIgnoreProperties({"reservations","client","messages"})
     private Client client;
 
-    @OneToMany(cascade = {CascadeType.PERSIST},mappedBy="reservation")
-    @JsonIgnoreProperties({"reservation","score"})
-    private List<Score> score;
+    /*@OneToMany(cascade = {CascadeType.PERSIST},mappedBy= "reservations")
+    @JsonIgnoreProperties({"reservations","score"})
+    private List<Score> score;*/
+
+    private String score;
 
     public Integer getIdReservation() {
         return idReservation;
@@ -39,12 +42,12 @@ public class Reservation {
         this.idReservation = idReservation;
     }
 
-    public Date getStarDate() {
-        return starDate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStarDate(Date starDate) {
-        this.starDate = starDate;
+    public void setStartDate(Date starDate) {
+        this.startDate = starDate;
     }
 
     public Date getDevolutionDate() {
@@ -55,12 +58,12 @@ public class Reservation {
         this.devolutionDate = devolutionDate;
     }
 
-    public Computer getComputer() {
-        return computer;
+    public Computer getComputers() {
+        return computers;
     }
 
-    public void setComputer(Computer computer) {
-        this.computer = computer;
+    public void setComputers(Computer computer) {
+        this.computers = computer;
     }
 
     public Client getClient() {
@@ -71,11 +74,19 @@ public class Reservation {
         this.client = client;
     }
 
-    public List<Score> getScore() {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getScore() {
         return score;
     }
 
-    public void setScore(List<Score> score) {
+    public void setScore(String score) {
         this.score = score;
     }
 }

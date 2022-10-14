@@ -3,7 +3,6 @@ package com.example.proyectopc.modelo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name="message")
@@ -17,11 +16,11 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name="idComputer")
-    @JsonIgnoreProperties({"computer","message","reservation","client"})
-    private Computer computer;
+    @JsonIgnoreProperties({"computers","messages","reservations","client"})
+    private Computer computers;
     @ManyToOne
     @JoinColumn(name="idClient")
-    @JsonIgnoreProperties({"computer","message","reservation","client"})
+    @JsonIgnoreProperties({"computers","messages","reservations","client"})
     private Client client;
 
     public Integer getIdMessage() {
@@ -40,12 +39,12 @@ public class Message {
         this.messageText = messageText;
     }
 
-    public Computer getComputer() {
-        return computer;
+    public Computer getComputers() {
+        return computers;
     }
 
-    public void setComputer(Computer computer) {
-        this.computer = computer;
+    public void setComputers(Computer computer) {
+        this.computers = computer;
     }
 
     public Client getClient() {

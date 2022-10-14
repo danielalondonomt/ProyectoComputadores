@@ -15,8 +15,8 @@ public class Score {
 
     @ManyToOne
     @JoinColumn(name="idReservation")
-    @JsonIgnoreProperties({"reservation","score"})
-    private Reservation reservation;
+    @JsonIgnoreProperties({"reservations","score"})
+    private Reservation reservations;
 
     public Integer getIdScore() {
         return idScore;
@@ -34,11 +34,11 @@ public class Score {
         this.score = score;
     }
 
-    public Reservation getReservation() {
-        return reservation;
+    public Reservation getReservations() {
+        return reservations;
     }
 
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
+    public void setReservations(Reservation reservation) {
+        this.reservations = reservation;
     }
 }

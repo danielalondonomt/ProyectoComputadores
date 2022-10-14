@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Locale;
 
 @Entity
 @Table(name="computer")
@@ -21,16 +20,16 @@ public class Computer {
 
     @ManyToOne
     @JoinColumn(name="idCategory")
-    @JsonIgnoreProperties("computer")
+    @JsonIgnoreProperties("computers")
     private Category category;
 
-    @OneToMany(cascade = {CascadeType.PERSIST},mappedBy="computer")
-    @JsonIgnoreProperties({"computer","message","reservation","client"})
-    private List<Message> message;
+    @OneToMany(cascade = {CascadeType.PERSIST},mappedBy= "computers")
+    @JsonIgnoreProperties({"computers","messages","reservations","client"})
+    private List<Message> messages;
 
-    @OneToMany(cascade = {CascadeType.PERSIST},mappedBy="computer")
-    @JsonIgnoreProperties({"computer","message","reservation","client"})
-    private List<Reservation> reservation;
+    @OneToMany(cascade = {CascadeType.PERSIST},mappedBy= "computers")
+    @JsonIgnoreProperties({"computers","messages","reservations","client"})
+    private List<Reservation> reservations;
 
 
     public Integer getId() {
@@ -81,19 +80,19 @@ public class Computer {
         this.category = category;
     }
 
-    public List<Message> getMessage() {
-        return message;
+    public List<Message> getMessages() {
+        return messages;
     }
 
-    public void setMessage(List<Message> message) {
-        this.message = message;
+    public void setMessages(List<Message> message) {
+        this.messages = message;
     }
-    public List<Reservation> getReservation() {
-        return reservation;
+    public List<Reservation> getReservations() {
+        return reservations;
     }
 
-    public void setReservation(List<Reservation> reservation) {
-        this.reservation = reservation;
+    public void setReservations(List<Reservation> reservation) {
+        this.reservations = reservation;
     }
 }
 
