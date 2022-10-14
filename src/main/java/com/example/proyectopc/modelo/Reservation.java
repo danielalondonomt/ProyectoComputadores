@@ -19,7 +19,7 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name="idComputer")
-    @JsonIgnoreProperties({"computer","reservations","client"})
+    @JsonIgnoreProperties({"computers","reservations","client"})
     private Computer computer;
 
     @ManyToOne
