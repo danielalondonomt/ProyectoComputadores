@@ -16,11 +16,11 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name="idComputer")
-    @JsonIgnoreProperties({"computers","messages","reservations","client"})
+    @JsonIgnoreProperties({"computer","messages","reservations","client"})
     private Computer computer;
     @ManyToOne
     @JoinColumn(name="idClient")
-    @JsonIgnoreProperties({"computers","messages","reservations","client"})
+    @JsonIgnoreProperties({"computer","messages","reservations","client"})
     private Client client;
 
     public Integer getIdMessage() {

@@ -24,11 +24,11 @@ public class Computer {
     private Category category;
 
     @OneToMany(cascade = {CascadeType.PERSIST},mappedBy= "computer")
-    @JsonIgnoreProperties({"computers","messages","reservations","client"})
+    @JsonIgnoreProperties({"computer","messages","reservations","client"})
     private List<Message> messages;
 
     @OneToMany(cascade = {CascadeType.PERSIST},mappedBy= "computer")
-    @JsonIgnoreProperties({"computers","messages","reservations","client"})
+    @JsonIgnoreProperties({"computer","messages","reservations","client"})
     private List<Reservation> reservations;
 
 
