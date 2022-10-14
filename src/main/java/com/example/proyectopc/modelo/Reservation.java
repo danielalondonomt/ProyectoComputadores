@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name="reservation")
@@ -20,8 +19,8 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name="idComputer")
-    @JsonIgnoreProperties({"computers","reservations","client"})
-    private Computer computers;
+    @JsonIgnoreProperties({"computer","reservations","client"})
+    private Computer computer;
 
     @ManyToOne
     @JoinColumn(name="idClient")
@@ -58,12 +57,12 @@ public class Reservation {
         this.devolutionDate = devolutionDate;
     }
 
-    public Computer getComputers() {
-        return computers;
+    public Computer getComputer() {
+        return computer;
     }
 
-    public void setComputers(Computer computer) {
-        this.computers = computer;
+    public void setComputer(Computer computer) {
+        this.computer = computer;
     }
 
     public Client getClient() {

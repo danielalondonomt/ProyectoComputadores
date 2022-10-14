@@ -16,11 +16,11 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name="idComputer")
-    @JsonIgnoreProperties({"computers","messages","reservations","client"})
-    private Computer computers;
+    @JsonIgnoreProperties({"computer","messages","reservations","client"})
+    private Computer computer;
     @ManyToOne
     @JoinColumn(name="idClient")
-    @JsonIgnoreProperties({"computers","messages","reservations","client"})
+    @JsonIgnoreProperties({"computer","messages","reservations","client"})
     private Client client;
 
     public Integer getIdMessage() {
@@ -39,12 +39,12 @@ public class Message {
         this.messageText = messageText;
     }
 
-    public Computer getComputers() {
-        return computers;
+    public Computer getComputer() {
+        return computer;
     }
 
-    public void setComputers(Computer computer) {
-        this.computers = computer;
+    public void setComputer(Computer computer) {
+        this.computer = computer;
     }
 
     public Client getClient() {

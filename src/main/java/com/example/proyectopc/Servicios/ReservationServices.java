@@ -46,8 +46,8 @@ public class ReservationServices {
                 if(p.getClient()!=null){
                     q.get().setClient(p.getClient());
                 }
-                if(p.getComputers()!=null){
-                    q.get().setComputers(p.getComputers());
+                if(p.getComputer()!=null){
+                    q.get().setComputer(p.getComputer());
                 }
 
                 if(p.getStatus()!=null){
