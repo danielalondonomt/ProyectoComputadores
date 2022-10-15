@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peliculas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $.ajax({
+            type:"GET",
+            dataType:"JSON",
+            url:"http://193.122.197.201:8081/api/Computer/all",
+            success:function(datos){
+                console.log(datos);
+                let datosComputer ="";
+                for (i=0; i<datos.length; i++){
+                    datosComputer = "<tr>";
+                    datosComputer += "<td>"+datos[i].id+"</td>";
+                    datosComputer += "<td>"+datos[i].name+"</td>";
+                    datosComputer += "<td>"+datos[i].brand+"</td>";
+                    datosComputer += "<td>"+datos[i].year+"</td>";
+                    datosComputer += "<td>"+datos[i].description+"</td>";
+                    datosComputer += "<td>"+datos[i].category.name+"</td>";
+                    datosComputer += "<td>"
+                    for(j= 0; j < datos[i].messages.length; j++){
+                        datosComputer += "<p>"+datos[i].messages[j].messageText+"</p>";
+                    }
+                    datosComputer += "</td>"
+                    datosComputer += "<td>"
+                    for(j= 0; j < datos[i].reservations.length; j++){
+                        datosComputer += "<p>"+  formatDate(datos[i].reservations[j].startDate)+"</p>";
+                    }
+                    datosComputer += "</td>"
+                    datosComputer += "<td>"
+                    for(j= 0; j < datos[i].reservations.length; j++){
+                        datosComputer += "<p>"+formatDate(datos[i].reservations[j].devolutionDate)+"</p>";
+                    }
+                    datosComputer += "</td>"
+                    datosComputer += "<td><a href = '#' onclick = 'editar("+datos[i].id+");' data-bs-toggle='modal' data-bs-target='#modalEditar' class = 'btn btn-warning'>Editar</a></td>";
+                    datosComputer += "<td><a href = '#' onclick = 'eliminar("+datos[i].id+");' class = 'btn btn-danger'>Eliminar</a></td>";
+                    datosComputer += "</tr>";
+
+                    $("#datos").append(datosComputer);
+                }
+                function formatDate(dateString) {
+                    var date = new Date(dateString);
+                    date = date.toLocaleDateString('en-US')
+                    return date;
+                }
+                
+            }
+        })
+
+        function eliminar(id){
+            console.log(id);
+            $.ajax({
+                type:"DELETE",
+                url:"http://193.122.197.201:8081/api/Computer/"+id,
+                success:function(datos){
+                    window.location.reload();
+                }
+            })
+        }
+
+        function editar(id){
+            console.log(id);
+            $.ajax({
+                type:"GET",
+                dataType:"JSON",
+                url:"http://193.122.197.201:8081/api/Computer/"+id,
+                success:function(datos){
+                    console.log(datos);
+                    document.querySelector("#idEd").value = id;
+                    document.querySelector("#nombreEd").value = datos.name;
+                    document.querySelector("#brandEd").value = datos.brand;
+                    document.querySelector("#yearEd").value = datos.year;
+                    document.querySelector("#descripcionEd").value = datos.description;
+                    document.querySelector("#categoriaEd").value = datos.category.name;
+                }
+            })
+        }
+
+        function guardarPelicula(){
+            console.log("Guardar");
+            let datosComputador = {
+                nombre:$("#nombre").val(),
+                brand:$("#brand").val(),
+                year:parseInt($("#year").val()),
+                descripcion:$("#descripcion").val(),
+                categoria:parseInt($("#categoria").val())
+            };
+
+            var parametros = {
+                "name":datosComputador.nombre,
+                "brand":datosComputador.brand,
+                "year":datosComputador.year,
+                "description":datosComputador.descripcion,
+                "category":{"id":datosComputador.categoria}
+            };
+            let parametrosEnvio = JSON.stringify(parametros);
+            $.ajax({
+                url:"http://193.122.197.201:8081/api/Computer/save",
+                type:"POST",
+                dataType:"JSON",
+                contentType:"application/JSON",
+                data:parametrosEnvio,
+                success:function(response){
+                    window.location.reload();
+                }
+            })
+            console.log(parametrosEnvio);
+        }
+
+        function editarPelicula(){
+            console.log("Guardar");
+            let datosComputador = {
+                id:parseInt($("#idEd").val()),
+                nombre:$("#nombreEd").val(),
+                brand:$("#brandEd").val(),
+                year:parseInt($("#yearEd").val()),
+                descripcion:$("#descripcionEd").val(),
+                categoria:parseInt($("#categoriaEd").val())
+            };
+
+            var parametros = {
+                "id":datosComputador.id,
+                "name":datosComputador.nombre,
+                "brand":datosComputador.brand,
+                "description":datosComputador.descripcion,
+                "year":datosComputador.year,
+                "category":{"id":datosComputador.categoria}
+            };
+            let parametrosEnvio = JSON.stringify(parametros);
+            console.log(parametrosEnvio);
+            $.ajax({
+                url:"http://193.122.197.201:8081/api/Computer/update",
+                type:"PUT",
+                dataType:"JSON",
+                contentType:"application/JSON",
+                data:parametrosEnvio,
+                success:function(response){
+                    window.location.reload();
+                }
+            })
+            console.log(datosComputador);
+        }
+    </script>
+</head>
+<body class="bg-light">
+    <div class="container " style="margin : 0">
+        <div class="row">
+            <div class="col-3 bg-secondary" style="padding: 2rem; height: 100vh;">
+                <h2 class="mt-4 mb-4" style="margin-bottom: 5rem; color: white;">Alquiler de Computadores</h2>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./categoria.html" style="color: white; text-decoration: none;">Categoria</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./computadores.html"style="color: white; text-decoration: none;"  >Computador</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./cliente.html"style="color: white; text-decoration: none;" >Cliente</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./mensajes.html"style="color: white; text-decoration: none;" >Mensajes</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./reservas.html"style="color: white; text-decoration: none;" >Reservas</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./administrador.html"style="color: white; text-decoration: none;" >Administradores</a><br></p>
+            </div>
+            <div class="col-1"  >
+            </div>
+            <div class="col-8"  >
+                    <h1 class="mt-5 mb-5 text-warning">Computadores</h1>
+                    <a href="#" class="btn btn-success" data-bs-toggle='modal' data-bs-target='#modalAgregar'>Agregar Computador</a>
+                    <table class="table table-dark mt-3">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Id</th>
+                                <th rowspan="2">Nombre</th>
+                                <th rowspan="2">Marca</th>
+                                <th rowspan="2">Año</th>
+                                <th rowspan="2">Descripcion</th>
+                                <th rowspan="2">Categoria</th>
+                                <th rowspan="2">Mensaje</th>
+                                <th class="text-center" colspan="2">Reservacion</th>
+                                <th class="text-center" colspan="2" rowspan="2">Acciones</th>
+                            </tr>
+                                
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                            <tr>
+
+                            </tr>
+                        </thead>
+                        <tbody id="datos">
+                        </tbody>
+                    </table>
+            </div>
+            </div>
+        
+    </div>
+
+  
+  <!-- Modal Agregar -->
+  <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarLabel">Agregar Computador</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="brand" placeholder="Brand">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="year" placeholder="Año">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="descripcion" placeholder="Descripción">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="categoria" placeholder="Categoria">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="guardarPelicula();">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Editar -->
+  <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarLabel">Editar Pelicula</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <input type="hidden" id="idEd">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="nombreEd" placeholder="Nombre">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="brandEd" placeholder="Brand">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="yearEd" placeholder="Año">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="descripcionEd" placeholder="Descripción">
+                </div>
+                <div class="mb-3">
+                    <input disabled="true" type="text" class="form-control" id="categoriaEd" placeholder="Categoria">
+                </div>
+            </form>
+        </div> 
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="editarPelicula();">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</html>

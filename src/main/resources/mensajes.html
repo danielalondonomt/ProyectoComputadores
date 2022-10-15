@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peliculas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $.ajax({
+            type:"GET",
+            dataType:"JSON",
+            url:"http://193.122.197.201:8081/api/Message/all",
+            success:function(datos){
+                console.log(datos);
+                let datosComputer ="";
+                for (i=0; i<datos.length; i++){
+                    datosComputer = "<tr>";
+                    datosComputer += "<td>"+datos[i].idMessage+"</td>";
+                    datosComputer += "<td>"+datos[i].messageText+"</td>";
+                    datosComputer += "<td>"+datos[i].computer.name+"</td>";
+                    datosComputer += "<td>"+datos[i].client.name+"</td>"
+                    datosComputer += "<td><a href = '#' onclick = 'editar("+datos[i].idMessage+");' data-bs-toggle='modal' data-bs-target='#modalEditar' class = 'btn btn-warning'>Editar</a></td>";
+                    datosComputer += "<td><a href = '#' onclick = 'eliminar("+datos[i].idMessage+");' class = 'btn btn-danger'>Eliminar</a></td>";
+                    datosComputer += "</tr>";
+
+                    $("#datos").append(datosComputer);
+                }
+
+                
+            }
+        })
+
+        function eliminar(idMessage){
+            console.log(idMessage);
+            $.ajax({
+                type:"DELETE",
+                url:"http://193.122.197.201:8081/api/Message/"+idMessage,
+                success:function(datos){
+                    window.location.reload();
+                }
+            })
+        }
+
+        function editar(idMessage){
+            console.log(idMessage);
+            $.ajax({
+                type:"GET",
+                dataType:"JSON",
+                url:"http://193.122.197.201:8081/api/Message/"+idMessage,
+                success:function(datos){
+                    console.log(datos);
+                    document.querySelector("#idmessageEd").value = idMessage;
+                    document.querySelector("#messagetextEd").value = datos.messageText;
+                    document.querySelector("#computerEd").value = datos.computer.id;
+                    document.querySelector("#clientEd").value = datos.client.idClient;
+                }
+            })
+        }
+
+        function guardarPelicula(){
+            console.log("Guardar");
+            let datosComputador = {
+                messagetext:$("#messagetext").val(),
+                computer:parseInt($("#computer").val()),
+                client:parseInt($("#client").val())
+            };
+
+            var parametros = {
+                "messageText":datosComputador.messagetext,
+                "computer":{"id":datosComputador.computer},
+                "client":{"idClient":datosComputador.client},
+            };
+            let parametrosEnvio = JSON.stringify(parametros);
+            $.ajax({
+                url:"http://193.122.197.201:8081/api/Message/save",
+                type:"POST",
+                dataType:"JSON",
+                contentType:"application/JSON",
+                data:parametrosEnvio,
+                success:function(response){
+                    window.location.reload();
+                }
+            })
+            console.log(parametrosEnvio);
+        }
+
+        function editarPelicula(){
+            console.log("Guardar");
+            let datosComputador = {
+                id:parseInt($("#idmessageEd").val()),
+                messagetext:$("#messagetextEd").val(),
+                computer:$("#computerEd").val(),
+                client:$("#clientEd").val(),
+            };
+
+            var parametros = {
+                "idMessage":datosComputador.id,
+                "messageText":datosComputador.messagetext,
+                "computer":{"id":datosComputador.computer},
+                "client":{"idClient":datosComputador.client},
+            };
+            let parametrosEnvio = JSON.stringify(parametros);
+            $.ajax({
+                url:"http://193.122.197.201:8081/api/Message/update",
+                type:"PUT",
+                dataType:"JSON",
+                contentType:"application/JSON",
+                data:parametrosEnvio,
+                success:function(response){
+                    window.location.reload();
+                }
+            })
+            console.log(datosComputador);
+        }
+    </script>
+</head>
+<body class="bg-light">
+    <div class="container " style="margin : 0">
+        <div class="row">
+            <div class="col-3 bg-secondary" style="padding: 2rem; height: 100vh;">
+                <h2 class="mt-4 mb-4" style="margin-bottom: 5rem; color: white;">Alquiler de Computadores</h2>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./categoria.html" style="color: white; text-decoration: none;">Categoria</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./computadores.html"style="color: white; text-decoration: none;"  >Computador</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./cliente.html"style="color: white; text-decoration: none;" >Cliente</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./mensajes.html"style="color: white; text-decoration: none;" >Mensajes</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./reservas.html"style="color: white; text-decoration: none;" >Reservas</a><br></p>
+                <p style="border-bottom: 1px solid white; font-size: 1.2rem;"><a href="./administrador.html"style="color: white; text-decoration: none;" >Administradores</a><br></p>
+            </div>
+            <div class="col-1"  >
+            </div>
+            <div class="col-8"  >
+                    <h1 class="mt-5 mb-5 text-warning">Mensajes</h1>
+                    <a href="#" class="btn btn-success" data-bs-toggle='modal' data-bs-target='#modalAgregar'>Agregar Mensaje</a>
+                    <table class="table table-dark mt-3">
+                        <thead>
+                            <tr>
+                                <th>IdMensaje</th>
+                                <th>Texto del mensaje</th>
+                                <th>Computador</th>
+                                <th>Cliente</th>
+                                <th class="text-center" colspan="2">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="datos">
+                        </tbody>
+                    </table>
+            </div>
+            </div>
+        
+    </div>
+
+  
+  <!-- Modal Agregar -->
+  <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarLabel">Agregar Mensaje</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="messagetext" placeholder="Mensaje">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="computer" placeholder= "Computador">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="client" placeholder="Cliente">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="guardarPelicula();">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Editar -->
+  <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarLabel">Editar Mensaje</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <input type="hidden" id="idmessageEd">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="messagetextEd" placeholder="Mensaje">
+                </div>
+                <div class="mb-3">
+                    <input disabled="true" type="text" class="form-control" id="computerEd" placeholder= "Computador">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="clientEd" placeholder="Cliente">
+                </div>
+            </form>
+        </div> 
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="editarPelicula();">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</html>
