@@ -1,6 +1,8 @@
 package com.example.proyectopc.Controlador;
 
 import com.example.proyectopc.Servicios.ReservationServices;
+import com.example.proyectopc.modelo.DTOs.CountClient;
+import com.example.proyectopc.modelo.DTOs.CountStatus;
 import com.example.proyectopc.modelo.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +48,20 @@ public class ReservationController {
         return reservationServices.delete(id);
     }
 
+    @GetMapping("/report-dates/{dateOne}/{dateTwo}")
+    public List<Reservation> getReportReservationBetweenDates(@PathVariable("dateOne") String dateOne, @PathVariable("dateTwo") String dateTwo){
+        return reservationServices.getReservationBetweenDates(dateOne, dateTwo);
+    }
+
+    @GetMapping("/report-status")
+    public CountStatus getReportStatus(){
+        return reservationServices.getReservationsStatus();
+    }
+
+    @GetMapping("/report-clients")
+    public List<CountClient> getBestClient(){
+        return reservationServices.getBestClient();
+    }
 
 
 }

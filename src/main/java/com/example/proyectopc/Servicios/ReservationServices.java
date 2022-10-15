@@ -1,10 +1,17 @@
 package com.example.proyectopc.Servicios;
 
+import com.example.proyectopc.modelo.DTOs.CountClient;
+import com.example.proyectopc.modelo.DTOs.CountStatus;
 import com.example.proyectopc.modelo.Reservation;
 import com.example.proyectopc.repositorio.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +56,6 @@ public class ReservationServices {
                 if(p.getComputer()!=null){
                     q.get().setComputer(p.getComputer());
                 }
-
                 if(p.getStatus()!=null){
                     q.get().setStatus(p.getStatus());
                 }
@@ -75,6 +81,35 @@ public class ReservationServices {
             return flag;
 
         }
+
+        //Reto 5
+        public List<Reservation> getReservationBetweenDates(String dateA, String dateB){
+            SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+            Date a =new Date();
+            Date b =new Date();
+            try{
+                a=parser.parse(dateA);
+                b=parser.parse(dateB);
+            }catch (ParseException error){
+                error.printStackTrace();
+            }
+            if(a.before(b)){
+                return reservationRepository.getReservationBetweenDates(a,b);
+            }else{
+                return new ArrayList<>();
+            }
+        }
+
+        public CountStatus getReservationsStatus(){
+            List<Reservation> reservesComplete = reservationRepository.getReservationByStatus("completed");
+            List<Reservation> reservesCancelled = reservationRepository.getReservationByStatus("cancelled");
+
+        return new CountStatus((long) reservesComplete.size(), (long) reservesCancelled.size());
+        }
+        public List<CountClient> getBestClient(){
+            return reservationRepository.getBestClient();
+        }
+
 
 
 }
